@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>James Sutton</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  /* Layout: single column, sticky terminal-style nav, max ~900px, dark-first developer theme */
+  :root{
+    --bg:#0b0f17; --surface:#121a27; --surface-2:#192334; --border:#28344a;
+    --fg:#e8eef7; --muted:#92a1ba; --accent:#2dd4bf; --accent-soft:rgba(45,212,191,.12);
+    --pass:#3fb950; --pass-soft:rgba(63,185,80,.14); --wip:#d6a334; --wip-soft:rgba(214,163,52,.14);
+    --shadow:0 1px 0 rgba(255,255,255,.02), 0 18px 40px -24px rgba(0,0,0,.7);
+    color-scheme:dark;
+    --maxw:900px;
+  }
+  @media (prefers-color-scheme:light){
+    :root:not([data-theme="dark"]){
+      --bg:#f5f7fb; --surface:#ffffff; --surface-2:#eef2f8; --border:#d8e0ec;
+      --fg:#111926; --muted:#55657d; --accent:#0d8a7d; --accent-soft:rgba(13,138,125,.1);
+      --pass:#1a7f37; --pass-soft:rgba(26,127,55,.1); --wip:#8a6500; --wip-soft:rgba(138,101,0,.1);
+      --shadow:0 1px 2px rgba(16,24,40,.04), 0 18px 36px -28px rgba(16,24,40,.28);
+      color-scheme:light;
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#f5f7fb; --surface:#ffffff; --surface-2:#eef2f8; --border:#d8e0ec;
+    --fg:#111926; --muted:#55657d; --accent:#0d8a7d; --accent-soft:rgba(13,138,125,.1);
+    --pass:#1a7f37; --pass-soft:rgba(26,127,55,.1); --wip:#8a6500; --wip-soft:rgba(138,101,0,.1);
+    --shadow:0 1px 2px rgba(16,24,40,.04), 0 18px 36px -28px rgba(16,24,40,.28);
+    color-scheme:light;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--bg); color:var(--fg);
+    font-family:"IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion:no-preference){ html{scroll-behavior:smooth} }
+  .mono{font-family:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace}
+  a{color:var(--accent); text-decoration:none}
+  a:hover{text-decoration:underline}
+  :focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:4px}
+
+  .wrap{max-width:var(--maxw); margin-inline:auto; padding-inline:20px}
+
+  /* header */
+  header.nav{
+    position:sticky; top:env(safe-area-inset-top,0px); z-index:20;
+    background:color-mix(in srgb, var(--bg) 86%, transparent);
+    backdrop-filter:blur(10px); border-bottom:1px solid var(--border);
+  }
+  .nav-inner{display:flex; align-items:center; gap:16px; min-height:58px; flex-wrap:wrap}
+  .brand{font-weight:600; font-size:.9rem; color:var(--fg); white-space:nowrap}
+  .brand .accent{color:var(--accent)}
+  .brand .muted{color:var(--muted)}
+  nav.links{display:flex; gap:4px; margin-left:auto; flex-wrap:wrap}
+  nav.links a{
+    color:var(--muted); font-size:.82rem; padding:6px 10px; border-radius:7px;
+    font-family:"IBM Plex Mono", monospace; letter-spacing:.01em;
+  }
+  nav.links a:hover{color:var(--fg); background:var(--surface-2); text-decoration:none}
+  .toggle{
+    background:var(--surface-2); color:var(--fg); border:1px solid var(--border);
+    border-radius:7px; padding:6px 9px; cursor:pointer; font-family:"IBM Plex Mono",monospace;
+    font-size:.78rem; display:inline-flex; align-items:center; gap:6px;
+  }
+  .toggle:hover{border-color:var(--accent)}
+
+  section{padding-block:56px}
+  .eyebrow{
+    font-family:"IBM Plex Mono", monospace; color:var(--accent); font-size:.78rem;
+    letter-spacing:.06em; margin:0 0 10px; text-transform:lowercase;
+  }
+  h1,h2,h3{text-wrap:balance; margin:0}
+  h2{font-size:clamp(1.4rem,3.2vw,1.9rem); font-weight:700; letter-spacing:-.01em; margin-bottom:22px}
+
+  /* hero */
+  .hero{padding-top:52px; padding-bottom:40px}
+  .hero h1{font-size:clamp(2.3rem,7vw,3.6rem); font-weight:700; letter-spacing:-.02em; line-height:1.05}
+  .hero .role{color:var(--muted); font-size:clamp(1rem,2.6vw,1.2rem); margin-top:14px; max-width:60ch}
+  .hero .loc{margin-top:12px; color:var(--muted); font-size:.85rem}
+  .hero .loc .accent{color:var(--accent)}
+  .cta{display:flex; gap:12px; margin-top:26px; flex-wrap:wrap}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px; padding:11px 18px; border-radius:9px;
+    font-size:.9rem; font-weight:600; font-family:"IBM Plex Mono",monospace; cursor:pointer; border:1px solid transparent;
+  }
+  .btn.primary{background:var(--accent); color:#04201d}
+  .btn.primary:hover{text-decoration:none; filter:brightness(1.07)}
+  .btn.ghost{background:transparent; color:var(--fg); border-color:var(--border)}
+  .btn.ghost:hover{border-color:var(--accent); text-decoration:none}
+
+  /* terminal card */
+  .term{
+    margin-top:34px; background:var(--surface); border:1px solid var(--border);
+    border-radius:12px; box-shadow:var(--shadow); overflow:hidden;
+  }
+  .term-bar{display:flex; align-items:center; gap:7px; padding:11px 14px; border-bottom:1px solid var(--border); background:var(--surface-2)}
+  .dot{width:11px; height:11px; border-radius:50%}
+  .term-bar .label{margin-left:8px; font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--muted)}
+  .term-body{padding:18px 16px; font-family:"IBM Plex Mono",monospace; font-size:.86rem; line-height:1.85; overflow-x:auto}
+  .term-body .pr{color:var(--accent)}
+  .term-body .out{color:var(--fg)}
+  .term-body .cm{color:var(--muted)}
+  .cursor{display:inline-block; width:8px; height:1.05em; background:var(--accent); vertical-align:-2px; animation:blink 1.1s steps(2,start) infinite}
+  @keyframes blink{50%{opacity:0}}
+  @media (prefers-reduced-motion:reduce){ .cursor{animation:none} }
+
+  /* about */
+  .about p{max-width:65ch; color:var(--fg); margin:0 0 16px; font-size:1.02rem}
+  .about p.lead{font-size:1.1rem}
+
+  /* test suite / skills */
+  .suite-meta{font-family:"IBM Plex Mono",monospace; font-size:.82rem; color:var(--muted); margin-bottom:18px}
+  .suite-meta .pass{color:var(--pass)}
+  .tests{display:grid; gap:10px}
+  .test{
+    display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px 16px;
+  }
+  .badge{
+    font-family:"IBM Plex Mono",monospace; font-size:.68rem; font-weight:600; letter-spacing:.05em;
+    padding:3px 8px; border-radius:5px; white-space:nowrap; margin-top:2px;
+  }
+  .badge.pass{color:var(--pass); background:var(--pass-soft)}
+  .test .t-name{font-weight:600; min-width:0}
+  .test .t-desc{color:var(--muted); font-size:.92rem; margin-top:2px; min-width:0}
+
+  /* stack / tech env */
+  .stack{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin-top:22px}
+  .stack .row{background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px 14px; min-width:0}
+  .stack .k{font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--accent); letter-spacing:.04em; text-transform:uppercase}
+  .stack .v{margin-top:4px; font-size:.92rem}
+
+  /* experience timeline */
+  .xp{display:grid; gap:0}
+  .job{
+    border-left:2px solid var(--border); padding:0 0 30px 22px; position:relative;
+  }
+  .job:last-child{padding-bottom:0}
+  .job::before{
+    content:""; position:absolute; left:-7px; top:4px; width:12px; height:12px; border-radius:50%;
+    background:var(--bg); border:2px solid var(--accent);
+  }
+  .job .when{font-family:"IBM Plex Mono",monospace; font-size:.78rem; color:var(--muted)}
+  .job .title{font-size:1.12rem; font-weight:700; margin-top:3px}
+  .job .org{color:var(--muted); font-size:.92rem; margin-top:1px}
+  .job ul{margin:12px 0 0; padding-left:18px; display:grid; gap:7px}
+  .job li{font-size:.95rem; max-width:64ch}
+  .job li::marker{color:var(--accent)}
+
+  .subjobs{margin-top:16px; display:grid; gap:16px}
+  .subjob{border-left:1px solid var(--border); padding-left:16px}
+  .subjob .title{font-size:1rem; font-weight:600}
+  .subjob .when{font-size:.74rem}
+
+  /* signature work */
+  .work{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px}
+  .card{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px; min-width:0}
+  .card .tag{font-family:"IBM Plex Mono",monospace; font-size:.7rem; color:var(--accent); letter-spacing:.04em; text-transform:uppercase}
+  .card h3{font-size:1.05rem; font-weight:700; margin-top:8px}
+  .card p{color:var(--muted); font-size:.92rem; margin:8px 0 0}
+  .card .metric{margin-top:12px; font-family:"IBM Plex Mono",monospace; font-size:.82rem; color:var(--pass); font-weight:600}
+
+  /* education + contact */
+  .edu{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px 20px}
+  .edu .deg{font-weight:600}
+  .edu .sch{color:var(--muted); font-size:.92rem; margin-top:2px; font-family:"IBM Plex Mono",monospace}
+
+  .contact-box{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:22px; display:grid; gap:14px}
+  .crow{display:flex; align-items:center; gap:12px; flex-wrap:wrap; min-width:0}
+  .crow .k{font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--muted); width:72px; flex:none}
+  .crow .val{font-size:.98rem; word-break:break-word; min-width:0}
+  .copy{
+    background:var(--surface-2); border:1px solid var(--border); color:var(--muted); cursor:pointer;
+    font-family:"IBM Plex Mono",monospace; font-size:.72rem; padding:4px 9px; border-radius:6px;
+  }
+  .copy:hover{color:var(--fg); border-color:var(--accent)}
+
+  footer{border-top:1px solid var(--border); padding-block:26px; color:var(--muted)}
+  footer .mono{font-size:.78rem}
+
+  @media (max-width:560px){
+    .crow .k{width:100%}
+    section{padding-block:44px}
+  }
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav-inner">
+    <div class="brand mono"><span class="accent">james</span><span class="muted">@</span><span>sutton</span><span class="muted">:~$</span></div>
+    <nav class="links mono">
+      <a href="#about">about</a>
+      <a href="#experience">experience</a>
+      <a href="#skills">skills</a>
+      <a href="#work">work</a>
+      <a href="#contact">contact</a>
+    </nav>
+    <button class="toggle mono" id="themeBtn" type="button" aria-label="Toggle colour theme"><span id="themeIcon">◐</span><span id="themeLbl">theme</span></button>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <p class="eyebrow mono">// engineering leadership</p>
+      <h1>James Sutton</h1>
+      <p class="role">I build and run engineering organisations that ship quickly without sacrificing reliability, security or customer trust.</p>
+      <p class="loc mono">📍 Barnsley, South Yorkshire, UK <span class="accent">·</span> EMEA / APJ / North America</p>
+      <div class="cta">
+        <a class="btn primary mono" href="#experience">view experience</a>
+        <a class="btn ghost mono" href="#contact">get in touch</a>
+      </div>
+
+      <div class="term" aria-hidden="true">
+        <div class="term-bar">
+          <span class="dot" style="background:#ff5f56"></span>
+          <span class="dot" style="background:#ffbd2e"></span>
+          <span class="dot" style="background:#27c93f"></span>
+          <span class="label mono">james@sutton: ~/career</span>
+        </div>
+        <div class="term-body">
+          <div><span class="pr">james@sutton:~$</span> <span class="out">whoami</span></div>
+          <div><span class="cm">&gt; Director-level engineering leader. Delivery, reliability &amp; developer productivity.</span></div>
+          <div><span class="pr">james@sutton:~$</span> <span class="out">cat strengths.txt</span></div>
+          <div><span class="cm">&gt; engineering-owned delivery · DORA · AI-assisted development · CI/CD at scale</span></div>
+          <div><span class="pr">james@sutton:~$</span> <span class="cursor"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+      <p class="eyebrow mono">// about</p>
+      <h2>From hands-on engineering to engineering leadership</h2>
+      <p class="lead">Over the past decade I have grown from hands-on engineering to Principal to Director, owning delivery for product teams and building distributed engineering functions across EMEA, APJ and North America.</p>
+      <p>I build engineering organisations where developers own outcomes end to end, feedback arrives at the point of change, and delivery decisions are led by data rather than opinion. My edge is making teams fast and reliable at the same time: I have owned delivery as a Principal Engineer running a product team, and now set engineering-wide delivery and quality strategy as a Director.</p>
+      <p>As organisations adopt AI-assisted development, I have led the work to make that shift safe and repeatable, using historical engineering data to define where and how AI-generated code can be trusted.</p>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience">
+      <p class="eyebrow mono">// experience</p>
+      <h2>Professional experience</h2>
+      <div class="xp">
+        <div class="job">
+          <div class="when mono">2023 – Present</div>
+          <div class="title">Director of Quality Engineering</div>
+          <div class="org">KnowBe4 (formerly Egress Software Technologies)</div>
+          <ul>
+            <li>Lead engineering-wide delivery and quality strategy for secure SaaS products operating at scale across AWS and Azure, owning outcomes across multiple product teams.</li>
+            <li>Designed and rolled out Quality Guardrails for AI-driven development: analysed historical failure and incident data to map where breakage concentrates, and encoded it into domain-level rules in the development workflow.</li>
+            <li>Cut production incidents by 65%, with escaped defects and cycle time falling as rework and review friction dropped.</li>
+            <li>Embedded DORA-aligned metrics and developed senior leaders and succession pathways within a growing international function.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <div class="when mono">2022 – 2023</div>
+          <div class="title">Principal Software Engineer</div>
+          <div class="org">xDesign</div>
+          <ul>
+            <li>Consulted to enterprise clients on modernising delivery, DevOps and quality across complex digital estates.</li>
+            <li>Defined automation and non-functional strategies that raised release confidence and delivery speed.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <div class="when mono">2015 – 2022</div>
+          <div class="title">Egress Software Technologies</div>
+          <div class="org">Progression across engineering and quality leadership over 7+ years</div>
+          <div class="subjobs">
+            <div class="subjob">
+              <div class="when mono">2019 – 2022</div>
+              <div class="title">Principal Engineer</div>
+              <ul>
+                <li>Managed a team of 10 engineers delivering Egress's endpoint product, the Outlook COM Add-in, owning delivery end to end from planning through release.</li>
+                <li>Accountable for the reliability and performance of software deployed across large, managed customer estates.</li>
+                <li>Ran hiring, reviews and career development for the team while setting technical direction and raising the engineering bar.</li>
+                <li>Drove the move to automation-first engineering and embedded secure development practice (SAST, SCA, DAST) across the product.</li>
+              </ul>
+            </div>
+            <div class="subjob">
+              <div class="when mono">2017 – 2019</div>
+              <div class="title">QA Manager</div>
+              <ul>
+                <li>Led the quality function and its people through rapid growth, building the practices multi-site UK and Canada teams ran on.</li>
+              </ul>
+            </div>
+            <div class="subjob">
+              <div class="when mono">2015 – 2017</div>
+              <div class="title">QA Lead &amp; ScrumMaster</div>
+              <ul>
+                <li>Led quality and agile delivery for multi-site teams, establishing performance and resiliency testing as core engineering disciplines.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS / TEST SUITE -->
+    <section id="skills">
+      <p class="eyebrow mono">// test suite</p>
+      <h2>Core competencies</h2>
+      <p class="suite-meta mono"><span class="pass">✓ 6 passed</span> · 0 failed · leadership.spec.ts</p>
+      <div class="tests">
+        <div class="test">
+          <span class="badge pass mono">PASS</span>
+          <div><div class="t-name">Engineering leadership &amp; org building</div><div class="t-desc">Built and led distributed engineering functions of up to 30 across EMEA and APJ, developing the managers and senior engineers within them.</div></div>
+        </div>
+        <div class="test">
+          <span class="badge pass mono">PASS</span>
+          <div><div class="t-name">Delivery ownership</div><div class="t-desc">Owned delivery as a Principal Engineer running a team of 10, and now as a Director setting engineering-wide delivery strategy across multiple product lines.</div></div>
+        </div>
+        <div class="test">
+          <span class="badge pass mono">PASS</span>
+          <div><div class="t-name">Developer productivity &amp; DORA</div><div class="t-desc">Operational excellence through DORA-aligned metrics that make engineering performance and stability transparent and led by data.</div></div>
+        </div>
+        <div class="test">
+          <span class="badge pass mono">PASS</span>
+          <div><div class="t-name">AI-assisted development governance</div><div class="t-desc">Quality Guardrails: a data-led framework that keeps AI-generated code trustworthy by encoding historical failure patterns into the workflow.</div></div>
+        </div>
+        <div class="test">
+          <span class="badge pass mono">PASS</span>
+          <div><div class="t-name">CI/CD &amp; cloud-native delivery</div><div class="t-desc">Delivery automation and CI/CD across cloud-native platforms on AWS and Azure.</div></div>
+        </div>
+        <div class="test">
+          <span class="badge pass mono">PASS</span>
+          <div><div class="t-name">Performance, resilience &amp; security</div><div class="t-desc">Performance and resiliency engineering with secure development practice (SAST, SCA, DAST) embedded across product teams.</div></div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="row"><div class="k">Languages</div><div class="v">C#, JavaScript, Python</div></div>
+        <div class="row"><div class="k">Cloud</div><div class="v">AWS, Azure</div></div>
+        <div class="row"><div class="k">Automation</div><div class="v">Selenium, Cypress, Playwright, Appium</div></div>
+        <div class="row"><div class="k">Performance</div><div class="v">JMeter, NBomber, Locust</div></div>
+        <div class="row"><div class="k">Security</div><div class="v">Veracode, Acunetix</div></div>
+        <div class="row"><div class="k">CI/CD &amp; Tooling</div><div class="v">Azure DevOps, GitLab, Jenkins, Jira</div></div>
+      </div>
+    </section>
+
+    <!-- SIGNATURE WORK -->
+    <section id="work">
+      <p class="eyebrow mono">// signature work</p>
+      <h2>Work that moved the numbers</h2>
+      <div class="work">
+        <div class="card">
+          <div class="tag mono">framework</div>
+          <h3>Quality Guardrails for AI</h3>
+          <p>A data-led framework that mines historical failure and incident data to find where breakage concentrates, then enforces coverage and architectural patterns at the point of change so AI-generated code stays trustworthy.</p>
+          <div class="metric mono">production incidents ↓ 65%</div>
+        </div>
+        <div class="card">
+          <div class="tag mono">transformation</div>
+          <h3>Engineering-owned delivery</h3>
+          <p>Shifted teams from siloed QA hand-offs to engineering-owned accountability, with feedback at the point of change and decisions led by DORA metrics rather than opinion.</p>
+          <div class="metric mono">faster cycle time · fewer escapes</div>
+        </div>
+        <div class="card">
+          <div class="tag mono">delivery</div>
+          <h3>Endpoint product (COM Add-in)</h3>
+          <p>As Principal Engineer, managed a team of 10 delivering Egress's Outlook COM Add-in end to end, accountable for reliability and performance across large managed customer estates.</p>
+          <div class="metric mono">team of 10 · owned end to end</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCATION -->
+    <section id="education">
+      <p class="eyebrow mono">// education</p>
+      <h2>Education</h2>
+      <div class="edu">
+        <div class="deg">BSc Forensic and Security Technologies</div>
+        <div class="sch mono">Sheffield Hallam University · 2012</div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <p class="eyebrow mono">// contact</p>
+      <h2>Get in touch</h2>
+      <div class="contact-box">
+        <p style="margin:0 0 4px; color:var(--muted); font-size:.95rem">The best way to reach me is on LinkedIn.</p>
+        <div class="crow">
+          <span class="k">linkedin</span>
+          <a class="val" href="https://www.linkedin.com/in/james-sutton-61b75373" target="_blank" rel="noopener">linkedin.com/in/james-sutton-61b75373</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="wrap">
+      <div class="mono">james@sutton:~$ echo "thanks for reading" <span style="color:var(--accent)">·</span> © 2026 James Sutton</div>
+    </div>
+  </footer>
+</main>
+
+<script>
+(function(){
+  // theme toggle (system default; explicit choice persisted)
+  var root=document.documentElement, btn=document.getElementById('themeBtn'),
+      icon=document.getElementById('themeIcon'), lbl=document.getElementById('themeLbl');
+  function apply(t){
+    if(t==='light'||t==='dark'){root.setAttribute('data-theme',t);}
+    else{root.removeAttribute('data-theme');}
+    var dark = t==='dark' || (t!=='light' && window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches);
+    icon.textContent = dark ? '☀' : '☾';
+    lbl.textContent = dark ? 'light' : 'dark';
+  }
+  var saved=null;
+  try{ saved=localStorage.getItem('jsutton-theme'); }catch(e){}
+  apply(saved||'system');
+  btn.addEventListener('click',function(){
+    var cur = root.getAttribute('data-theme');
+    var isDark = cur ? cur==='dark' : (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches);
+    var next = isDark ? 'light' : 'dark';
+    apply(next);
+    try{ localStorage.setItem('jsutton-theme', next); }catch(e){}
+  });
+
+  // copy buttons
+  document.querySelectorAll('.copy').forEach(function(b){
+    b.addEventListener('click',function(){
+      var txt=b.getAttribute('data-copy'); var done=function(){var o=b.textContent; b.textContent='copied ✓'; setTimeout(function(){b.textContent=o;},1400);};
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(done).catch(function(){fallback();});
+      } else { fallback(); }
+      function fallback(){
+        var r=document.createRange(); r.selectNodeContents(document.getElementById('email'));
+        var s=window.getSelection(); s.removeAllRanges(); s.addRange(r); done();
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
